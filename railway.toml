@@ -1,16 +1,20 @@
 # railway.toml
 
-[phases.setup]
-# Tambahkan ekstensi PHP ZIP agar Spatie Simple Excel bisa jalan
-nixPkgs = ["php82Extensions.zip"]
+[build]
+builder = "railpack/php"
 
-[phases.install]
+[variables]
+APP_ENV = "production"
+APP_DEBUG = "false"
+
+[install]
 cmds = [
+  "install-php-extensions zip",
   "composer install --no-dev --optimize-autoloader",
   "npm ci"
 ]
 
-[phases.build]
+[build]
 cmds = [
   "npm run build",
   "php artisan config:cache",
