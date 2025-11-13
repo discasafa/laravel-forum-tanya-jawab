@@ -45,4 +45,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // 🔹 Relasi ke Profile (One to One)
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    // 🔹 Relasi ke Question (One to Many)
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    // 🔹 Relasi ke Answer (One to Many)
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 }
