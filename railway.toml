@@ -1,7 +1,6 @@
 # railway.toml
 
 [build]
-builder = "railpack/php"
 cmds = [
   "install-php-extensions zip",
   "composer install --no-dev --optimize-autoloader",
