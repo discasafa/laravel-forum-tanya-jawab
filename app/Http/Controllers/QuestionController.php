@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use RealRashid\SweetAlert\Facades\Alert;
 
+
 class QuestionController extends Controller
 {
     use AuthorizesRequests;
@@ -155,5 +156,30 @@ class QuestionController extends Controller
         // 4. Redirect
         Alert::warning('Dihapus!', 'Pertanyaan berhasil dihapus.');
         return redirect()->route('questions.index');
+    }
+
+    /**
+     * Export all questions to a CSV file.
+     */
+    public function export()
+    {
+        $fileName = 'questions_export_' . now()->format('Y-m-d_H-i-s') . '.csv';
+        $questions = Question::with(['user', 'category'])->get();
+
+        $path = storage_path('app/public/' . $fileName);
+
+        \Spatie\SimpleExcel\SimpleExcelWriter::create($path)
+            ->addHeader(['Judul', 'Kategori', 'Penanya', 'Isi Pertanyaan', 'Tanggal Dibuat'])
+            ->addRows($questions->map(function ($q) {
+                return [
+                    'Judul' => $q->title,
+                    'Kategori' => $q->category->name ?? '-',
+                    'Penanya' => $q->user->name ?? '-',
+                    'Isi Pertanyaan' => $q->content,
+                    'Tanggal Dibuat' => $q->created_at->format('d-m-Y H:i'),
+                ];
+            })->toArray());
+
+        return response()->download($path)->deleteFileAfterSend(true);
     }
 }
