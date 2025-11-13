@@ -2,36 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'category_id',
-        'title',
-        'body',
-        'image_path',
-    ];
-
-    // 🔹 Relasi ke User (Many to One)
-    public function user()
+    /**
+     * Mendapatkan user yang membuat pertanyaan ini.
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // 🔹 Relasi ke Category (Many to One)
-    public function category()
+    /**
+     * Mendapatkan kategori dari pertanyaan ini.
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    // 🔹 Relasi ke Answer (One to Many)
-    public function answers()
+    /**
+     * Mendapatkan jawaban-jawaban untuk pertanyaan ini.
+     */
+    public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
     }
+
+    // Tambahkan juga $fillable
+    protected $fillable = ['user_id', 'category_id', 'title', 'content', 'image'];
 }

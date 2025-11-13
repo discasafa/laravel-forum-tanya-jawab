@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('full_name')->nullable();
-            $table->integer('age')->nullable();
-            $table->text('address')->nullable();
-            $table->string('avatar')->nullable();
+            $table->text('biodata')->nullable();
+            $table->integer('umur')->nullable();
+            $table->text('alamat')->nullable();
             $table->timestamps();
         });
     }

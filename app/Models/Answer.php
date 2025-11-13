@@ -2,28 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Answer extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'question_id',
-        'user_id',
-        'body',
-    ];
+    /**
+     * Mendapatkan user yang membuat jawaban ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    // 🔹 Relasi ke Question (Many to One)
-    public function question()
+    /**
+     * Mendapatkan pertanyaan yang dijawab.
+     */
+    public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
     }
 
-    // 🔹 Relasi ke User (Many to One)
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // Tambahkan juga $fillable
+    protected $fillable = ['user_id', 'question_id', 'content'];
 }
