@@ -16,6 +16,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $request->user()->profile()->firstOrCreate(
+            ['user_id' => $request->user()->id]
+        );
+
+        $request->user()->refresh();
+        
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -33,6 +39,13 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        $profileData = $request->only(['biodata', 'umur', 'alamat']);
+
+        $request->user()->profile()->updateOrCreate(
+            ['user_id' => $request->user()->id],
+            $profileData
+        );
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
